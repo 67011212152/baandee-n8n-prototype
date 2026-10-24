@@ -1,0 +1,481 @@
+{
+  "name": "304_project",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtMinute": 5
+            }
+          ]
+        }
+      },
+      "id": "c7237d0e-c23d-4995-ab4e-e294ad4025d6",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -272,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU",
+          "mode": "list",
+          "cachedResultName": "Complaint_Category_Policy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Policy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "104255c7-04ce-497e-8d8a-d4ba2c775ffa",
+      "name": "Read Policy",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -112,
+        -16
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aZDtNUqzGRSYDl8f",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU",
+          "mode": "list",
+          "cachedResultName": "Complaint_Category_Policy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1811977103,
+          "mode": "list",
+          "cachedResultName": "Complaint",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit#gid=1811977103"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "id": "9882a38c-4837-4400-8b62-25811c68dbf3",
+      "name": "Read Complaint",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        -16
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aZDtNUqzGRSYDl8f",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const orderId = String(item.json.Order_ID ?? '').trim();\n  if (orderId !== '' && !orderId.toUpperCase().includes('UNKNOWN')) {\n    item.json.is_order_valid = true;\n  } else {\n    item.json.is_order_valid = false;\n  }\n}\nreturn $input.all();"
+      },
+      "id": "b2473c29-d9bd-4aa8-9dae-c28311385cf5",
+      "name": "Code in JavaScript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "0a9475b6-7f99-4645-bead-9cdcd57bea90",
+              "leftValue": "={{ $json.is_order_valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1c168f8f-e4c9-46fc-a7ef-8a84f24089a3",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        352,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU",
+          "mode": "list",
+          "cachedResultName": "Complaint_Category_Policy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 732102817,
+          "mode": "list",
+          "cachedResultName": "Manual Review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit#gid=732102817"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ticket_ID": "={{ $json.Ticket_ID }}",
+            "Order_ID": "={{ $json.Order_ID }}",
+            "Message": "={{ $json.Message }}",
+            "Quarantine_Reason": "Missing or invalid Order_ID",
+            "Created_At": "={{ $json.Created_At }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Ticket_ID",
+              "displayName": "Ticket_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Order_ID",
+              "displayName": "Order_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Quarantine_Reason",
+              "displayName": "Quarantine_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_At",
+              "displayName": "Created_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "680f5938-ce3d-4c01-bef1-8e625e2857e5",
+      "name": "Save Manual",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        96
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aZDtNUqzGRSYDl8f",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const msg = item.json.Message ? item.json.Message.toLowerCase() : \"\";\n\n  // 1. ตั้งค่าเริ่มต้น (หมวดทั่วไป)\n  let category = \"General Inquiry\";\n  let priority = \"Low\";\n  let team = \"Customer Service\";\n  let sla = 48;\n  let autoReply = \"ขอบคุณที่ติดต่อสอบถามข้อมูล แอดมินกำลังตรวจสอบและจะรีบตอบกลับโดยเร็วที่สุดครับ\";\n\n  // 2. ดักจับคีย์เวิร์ดเพื่อแยกหมวดและกำหนดข้อความตอบกลับ\n  if (msg.includes(\"ช้า\") || msg.includes(\"ตาม\") || msg.includes(\"ยังไม่ได้\") || msg.includes(\"not arrived\") || msg.includes(\"where is\") || msg.includes(\"delivery status\")) {\n    category = \"Late Delivery\";\n    priority = \"High\";\n    team = \"Logistics\";\n    sla = 24;\n    autoReply = \"ขออภัยในความล่าช้าครับ แผนกขนส่งกำลังเร่งตรวจสอบสถานะพัสดุและจะอัปเดตให้ทราบโดยเร็วที่สุด\";\n  } \n  else if (msg.includes(\"พัง\") || msg.includes(\"แตก\") || msg.includes(\"ตำหนิ\") || msg.includes(\"ผิดสี\") || msg.includes(\"ไม่ตรงปก\") || msg.includes(\"defect\") || msg.includes(\"broken\")) {\n    category = \"Product Defect\";\n    priority = \"High\";\n    team = \"QC & Claims\";\n    sla = 48;\n    autoReply = \"ขออภัยในความไม่สะดวกครับ รบกวนส่งรูปภาพสินค้าที่มีปัญหาเพื่อให้ทีม QC ตรวจสอบและดำเนินการเคลมสินค้าให้ครับ\";\n  } \n  else if (msg.includes(\"ไม่ครบ\") || msg.includes(\"ขาด\") || msg.includes(\"หาย\")) {\n    category = \"Missing Item\";\n    priority = \"High\";\n    team = \"Warehouse\";\n    sla = 48;\n    autoReply = \"ขออภัยครับ ทีมคลังสินค้ากำลังตรวจสอบกล้องวงจรปิดและรายการแพ็กสินค้าเพื่อจัดส่งชิ้นที่ตกหล่นให้ทันทีครับ\";\n  } \n  else if (msg.includes(\"เงิน\") || msg.includes(\"คืน\") || msg.includes(\"ใบเสร็จ\") || msg.includes(\"โกง\") || msg.includes(\"refund\") || msg.includes(\"charge\")) {\n    category = \"Refund/Billing\";\n    priority = \"Critical\";\n    team = \"Finance\";\n    sla = 12;\n    autoReply = \"ได้รับเรื่องคำร้องขอคืนเงินเรียบร้อยครับ ทีมการเงินกำลังตรวจสอบยอดและหลักฐานการชำระเงินให้อย่างเร่งด่วน\";\n  } \n  else if (msg.includes(\"มารยาท\") || msg.includes(\"แย่\") || msg.includes(\"พูดไม่ดี\") || msg.includes(\"rude\")) {\n    category = \"Rude Staff\";\n    priority = \"Medium\";\n    team = \"Customer Service\";\n    sla = 48;\n    autoReply = \"ทางผู้บริหารต้องขออภัยเป็นอย่างยิ่งกับเหตุการณ์ที่เกิดขึ้น เราจะนำไปปรับปรุงและอบรมพนักงานทันทีครับ\";\n  }\n\n  // ดักจับคำรุนแรง ดัน Priority ขึ้นสูงสุด (Critical)\n  if (msg.includes(\"ฟ้อง\") || msg.includes(\"สคบ\") || msg.includes(\"ประจาน\") || msg.includes(\"แจ้งความ\") || msg.includes(\"ระเบิด\")) {\n    priority = \"Critical\";\n    sla = 12;\n    autoReply = \"ทางเราได้รับเรื่องร้องเรียนระดับเร่งด่วนแล้ว ผู้จัดการฝ่ายดูแลลูกค้ากำลังติดต่อกลับเพื่อเร่งแก้ไขปัญหาให้ท่านทันทีครับ\";\n  }\n\n  // 3. ส่งตัวแปรทั้งหมดออกไปให้โหนด Google Sheets ใช้งานต่อ\n  item.json.summary = msg.length > 50 ? msg.substring(0, 50) + \"...\" : msg;\n  item.json.category = category;\n  item.json.priority = priority;\n  item.json.team = team;\n  item.json.sla = sla;\n  item.json.auto_reply = autoReply;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        -80
+      ],
+      "id": "e016f5f0-a21b-46c2-aa2e-5d8b86948561",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU",
+          "mode": "list",
+          "cachedResultName": "Complaint_Category_Policy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 526833099,
+          "mode": "list",
+          "cachedResultName": "Processed",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_7MdXfaa99_aaEIcQUfScqM8kzmUxXYdM_eEKg9IOVU/edit#gid=526833099"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ticket_ID": "={{ $('Read Complaint').item.json.Ticket_ID }}",
+            "Order_ID": "={{ $('Read Complaint').item.json.Order_ID }}",
+            "Message": "={{ $('Read Complaint').item.json.Message }}",
+            "Category": "={{ $json.category }}",
+            "Priority": "={{ $json.priority }}",
+            "Responsible_Team": "={{ $json.team }}",
+            "SLA_Hours": "={{ $json.sla }}",
+            "Auto_Reply_Template": "={{ $json.auto_reply }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Ticket_ID",
+              "displayName": "Ticket_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Order_ID",
+              "displayName": "Order_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Responsible_Team",
+              "displayName": "Responsible_Team",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "SLA_Hours",
+              "displayName": "SLA_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Auto_Reply_Template",
+              "displayName": "Auto_Reply_Template",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Processed_At",
+              "displayName": "Processed_At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "eb16e0b2-4e17-4b67-b923-dbf43dc9a91a",
+      "name": "Processed",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        -80
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aZDtNUqzGRSYDl8f",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Policy": {
+      "main": [
+        [
+          {
+            "node": "Read Complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Complaint": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save Manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8eee75ac-521b-4629-9b74-2dde51be6a78",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e799b530de5a84c7994e839016ad0e2e4119216f79b84aab92da35afb6094932"
+  },
+  "nodeGroups": [],
+  "id": "OQNbuBHAurj5CAJN",
+  "tags": []
+}
