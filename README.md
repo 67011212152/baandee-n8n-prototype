@@ -1,6 +1,6 @@
 # BaanDee Living - Automated Customer Complaint Management System
 
-## 📌 1. ปัญหาทางธุรกิจ (Business Problem)
+## 1. ปัญหาทางธุรกิจ (Business Problem)
 บริษัท **BaanDee Living** ประสบปัญหาในการจัดการข้อร้องเรียนและข้อสอบถามจากลูกค้า (Customer Complaints & Inquiries) ที่เพิ่มขึ้นอย่างรวดเร็ว ส่งผลกระทบต่อการดำเนินงานในหลายมิติ ดังนี้:
 
 1. **ความล่าช้าในการคัดแยกเคส (High Handling Time):** เจ้าหน้าที่ Customer Service ต้องอ่านและเปลี่ยนหมวดหมู่เคสด้วยตนเองทีละรายการ ทำให้เกิดความล่าช้าและเคสตกค้างจำนวนมาก
@@ -10,7 +10,7 @@
 
 ---
 
-## 👤 2. ผู้ใช้งานหลัก (Target Users / Stakeholders)
+## 2. ผู้ใช้งานหลัก (Target Users / Stakeholders)
 
 1. **Customer Support Team / CS Agents:**
    * **บทบาท:** ผู้ดูแลเคสหลักในการตอบลูกค้าและติดตามเคสที่ได้รับการคัดแยกหมวดหมู่และกำหนด Priority มาแล้ว
@@ -23,6 +23,6 @@
 
 ---
 
-## 🏗️ 3. สถาปัตยกรรมระบบ (System Architecture)
+## 3. สถาปัตยกรรมระบบ (System Architecture)
 ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
 
