@@ -1,11 +1,11 @@
 # baandee-n8n-prototype
-# 🚀 Customer Complaint Automation & Categorization System (BaanDee Living)
+# Customer Complaint Automation & Categorization System (BaanDee Living)
 
 ระบบประมวลผล คัดแยกหมวดหมู่ และจัดการข้อร้องเรียนของลูกค้าอัตโนมัติ (Automated Complaint Handling System) พัฒนาขึ้นด้วย **n8n** และ **Google Sheets API** เพื่อช่วยเพิ่มประสิทธิภาพการทำงานของทีมสนับสนุนลูกค้า (Customer Service) และทีมปฏิบัติการภายในองค์กร
 
 ---
 
-## 📌 1. ปัญหาทางธุรกิจ (Business Problem)
+## 1. ปัญหาทางธุรกิจ (Business Problem)
 ในปัจจุบัน บริษัท BaanDee Living ได้รับข้อร้องเรียนและสอบถามจากลูกค้าผ่านช่องทางดิจิทัลเป็นจำนวนมาก โดยพบปัญหาหลักในการจัดการข้อมูลดังนี้:
 * **ปริมาณข้อความสูงและล่าช้าในการตอบกลับ:** การคัดแยกประเภทปัญหาและส่งต่อให้ทีมที่เกี่ยวข้องด้วยมนุษย์ (Manual) ใช้เวลานาน ทำให้ไม่ทันกำหนดเวลา SLA
 * **ข้อมูลดิบขาดคุณภาพ (Data Quality Issues):** พบปัญหา `Order_ID` สูญหาย หรือระบุเป็น `UNKNOWN` ซึ่งหากส่งข้อความตอบกลับอัตโนมัติทันทีอาจเกิดความผิดพลาดในการสื่อสาร
@@ -13,7 +13,7 @@
 
 ---
 
-## 👤 2. ผู้ใช้งานหลัก (Target Users / Stakeholders)
+## 2. ผู้ใช้งานหลัก (Target Users / Stakeholders)
 1. **Customer Support Team (ทีมบริการลูกค้า):** ใช้ติดตามเคสข้อร้องเรียนทั่วไปและส่ง Auto Reply ให้ลูกค้าอย่างรวดเร็ว
 2. **Specialized Teams (ทีมปฏิบัติการเฉพาะทาง):** 
    * **Logistics:** ดูแลเคสส่งสินค้าล่าช้า (`Late Delivery`)
@@ -24,7 +24,7 @@
 
 ---
 
-## 🏗️ 3. สถาปัตยกรรมระบบ (System Architecture)
+## 3. สถาปัตยกรรมระบบ (System Architecture)
 
 ระบบทำงานในรูปแบบ **Event-Driven & Rule-Based Automation Workflow** บน n8n ดังนี้:
 
