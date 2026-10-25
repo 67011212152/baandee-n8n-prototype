@@ -52,9 +52,6 @@
         - Category & Team Assignment
         - Priority & SLA Calculation
         - Dynamic Auto Reply Selection
-        
-
-
                  │
                  ▼
                  
