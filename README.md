@@ -1,57 +1,36 @@
 # baandee-n8n-prototype
-# Customer Complaint Automation & Categorization System (BaanDee Living)
+# Automated Customer Complaint Processing & Triage System (BaanDee Living)
 
-ระบบประมวลผล คัดแยกหมวดหมู่ และจัดการข้อร้องเรียนของลูกค้าอัตโนมัติ (Automated Complaint Handling System) พัฒนาขึ้นด้วย **n8n** และ **Google Sheets API** เพื่อช่วยเพิ่มประสิทธิภาพการทำงานของทีมสนับสนุนลูกค้า (Customer Service) และทีมปฏิบัติการภายในองค์กร
+ระบบอัตโนมัติสำหรับจัดการ คัดแยก และตอบกลับข้อร้องเรียนของลูกค้า (Customer Complaints) แบบ End-to-End เพื่อเพิ่มประสิทธิภาพในการให้บริการและลดระยะเวลาในการตอบสนอง (SLA) ของธุรกิจ
 
 ---
 
 ## 1. ปัญหาทางธุรกิจ (Business Problem)
-ในปัจจุบัน บริษัท BaanDee Living ได้รับข้อร้องเรียนและสอบถามจากลูกค้าผ่านช่องทางดิจิทัลเป็นจำนวนมาก โดยพบปัญหาหลักในการจัดการข้อมูลดังนี้:
-* **ปริมาณข้อความสูงและล่าช้าในการตอบกลับ:** การคัดแยกประเภทปัญหาและส่งต่อให้ทีมที่เกี่ยวข้องด้วยมนุษย์ (Manual) ใช้เวลานาน ทำให้ไม่ทันกำหนดเวลา SLA
-* **ข้อมูลดิบขาดคุณภาพ (Data Quality Issues):** พบปัญหา `Order_ID` สูญหาย หรือระบุเป็น `UNKNOWN` ซึ่งหากส่งข้อความตอบกลับอัตโนมัติทันทีอาจเกิดความผิดพลาดในการสื่อสาร
-* **ขาดการจัดลำดับความสำคัญ (Priority Handling):** ข้อร้องเรียนเร่งด่วน (เช่น การขอคืนเงิน หรือข้อความขู่ฟ้องร้อง) ไม่ถูกดันขึ้นมาจัดการก่อน ทำให้เกิดความเสี่ยงทางธุรกิจ
+
+บริษัท **BaanDee Living** ประสบปัญหาในการจัดการข้อร้องเรียนจากลูกค้าที่เข้ามาเป็นจำนวนมากในแต่ละวันผ่านช่องทางออนไลน์:
+
+* **การประมวลผลล่าช้า (Manual Bottleneck):** พนักงานต้องอ่านและส่งต่อเคสให้แต่ละทีมด้วยตัวเอง ทำให้ลูกค้าต้องรอตอบกลับเป็นเวลานาน
+* **การจัดเคสผิดพลาด (Misclassification):** เคสถูกส่งไปผิดทีม ส่งผลให้การแก้ไขปัญหาข้ามแผนกใช้เวลาเกิน SLA ที่กำหนด
+* **ปัญหาคุณภาพข้อมูล (Data Quality Issues):** ข้อมูล Order ID ที่เข้ามามีความไม่สมบูรณ์ (เช่น ค่าว่าง หรือขึ้น `ORD-UNKNOWN`) ทำให้ไม่สามารถประมวลผลอัตโนมัติได้ทันที
+* **การจัดการเคสวิกฤต (Critical Cases):** เคสที่มีความเสี่ยงสูง (เช่น คำขู่ฟ้องร้อง สคบ. หรือขอคืนเงิน) ไม่ได้รับการดัน Priority ขึ้นระดับสูงสุดในทันที
+
+**เป้าหมายของระบบ:** สร้างระบบประมวลผลอัตโนมัติเพื่อดึงข้อมูล คัดแยกหมวดหมู่ กำหนดความเร่งด่วน ประเมิน SLA และสร้างข้อความตอบกลับอัตโนมัติ พร้อมระบบแยกเคสที่มีปัญหาเข้าสู่กระบวนการ ตรวจสอบโดยพนักงาน (Human-in-the-loop / Manual Review)[span_0](start_span)[span_0](end_span)
 
 ---
 
-## 2. ผู้ใช้งานหลัก (Target Users / Stakeholders)
-1. **Customer Support Team (ทีมบริการลูกค้า):** ใช้ติดตามเคสข้อร้องเรียนทั่วไปและส่ง Auto Reply ให้ลูกค้าอย่างรวดเร็ว
-2. **Specialized Teams (ทีมปฏิบัติการเฉพาะทาง):** 
-   * **Logistics:** ดูแลเคสส่งสินค้าล่าช้า (`Late Delivery`)
-   * **QC & Claims:** ดูแลเคสสินค้าชำรุด/แตกหัก (`Product Defect`)
-   * **Warehouse:** ดูแลเคสสินค้าขาดหาย (`Missing Item`)
-   * **Finance:** ดูแลเคสขอคืนเงินและใบเสร็จ (`Refund/Billing`)
-3. **Operations Manager / Admin:** เข้ามาตรวจสอบเคสที่ต้องใช้มนุษย์ตัดสินใจเพิ่มเติมผ่านแท็บ `Manual Review`
+## 2. ผู้ใช้งานหลัก (Target Users / Primary Stakeholders)
+
+1. **Customer Service Team (ฝ่ายบริการลูกค้า):**
+   * ติดตามภาพรวมข้อร้องเรียนที่ถูกคัดแยกและตอบกลับอัตโนมัติ
+   * เข้ารับช่วงต่อดูแลเคสเฉพาะทางหรือเคสที่มีความเสี่ยงสูง
+2. **Specialized Support Teams (ทีมเฉพาะทาง - Logistics, QC & Claims, Warehouse, Finance):**
+   * รับเคสที่ตรงกับหน้าที่ของตนเองพร้อมข้อมูล SLA_Hours ที่ชัดเจนเพื่อดำเนินการแก้ไข
+3. **Operations Manager (ผู้จัดการฝ่ายปฏิบัติการ):**
+   * เข้าตรวจสอบเคสในแท็บ `Manual Review` เพื่อแก้ไขข้อมูล Order ID ที่ผิดปกติก่อนส่งกลับเข้าสู่ระบบ
 
 ---
 
 ## 3. สถาปัตยกรรมระบบ (System Architecture)
 
-ระบบทำงานในรูปแบบ **Event-Driven & Rule-Based Automation Workflow** บน n8n ดังนี้:
-
-[Schedule Trigger (Every 5 mins)]
-
-          │
-          ▼
-[Read Google Sheets: Complaint & Policy]
-
-          │
-          ▼
-[Data Validation & Quarantine Check (Code & If Node)]
-
-       ├───► (Order_ID Invalid / UNKNOWN) ───► [Write to "Manual Review" Sheet] (Human-in-the-loop)
-       │
-       └───► (Order_ID Valid)
-                 │
-                 ▼
-                 
-      [JavaScript Processing Node]
-        - Keyword Matching & Rules
-        - Category & Team Assignment
-        - Priority & SLA Calculation
-        - Dynamic Auto Reply Selection
-                 │
-                 ▼
-                 
-      [Write to "Processed" Sheet]
-
+ระบบถูกออกแบบโดยใช้สถาปัตยกรรม **Automation Pipeline** ทำงานร่วมกับ **Google Sheets** และ **n8n Workflow**:
 
