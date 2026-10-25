@@ -27,25 +27,16 @@
 ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
 
 
-[Schedule Trigger (Every 5 mins)]
+```mermaid
+flowchart TD
+    A[Schedule Trigger - Every 5 mins] --> B[Read Complaint & Read Policy]
+    B --> C[Data Quality Check - Code & If Node]
+    
+    C -->|Invalid Order_ID| D[Manual Review Sheet<br/>Human-in-the-loop]
+    C -->|Valid Order_ID| E[Code Node<br/>Keyword Matching & Priority]
+    
+    E --> F[Processed Sheet<br/>Google Sheets]
 
-│
-▼
-
-[Read Complaint & Read Policy (Google Sheets)]
-
-│
-▼
-
-[Data Quality Check (Code & If Node)]
-
-├── (Invalid Order_ID) ➔ [Manual Review Sheet (Human-in-the-loop)]
-└── (Valid Order_ID)   ➔ [Code Node (Keyword Matching & Priority)]
-
-│
-▼
-
-[Processed Sheet (Google Sheets)]
 
 ### รายละเอียดของส่วนประกอบระบบ (Node Responsibilities):
 * **Schedule Trigger:** กระตุ้นการทำงานของ Workflow แบบอัตโนมัติทุกๆ 5 นาที
