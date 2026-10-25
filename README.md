@@ -28,16 +28,25 @@
 
 
 [Schedule Trigger (Every 5 mins)]
+
 │
+
 ▼
+
 [Read Complaint & Read Policy (Google Sheets)]
+
 │
+
 ▼
+
 [Data Quality Check (Code & If Node)]
 ├── (Invalid Order_ID) ➔ [Manual Review Sheet (Human-in-the-loop)]
 └── (Valid Order_ID)   ➔ [Code Node (Keyword Matching & Priority)]
+
 │
+
 ▼
+
 [Processed Sheet (Google Sheets)]
 
 ### รายละเอียดของส่วนประกอบระบบ (Node Responsibilities):
