@@ -25,7 +25,8 @@
 
 # 3. สถาปัตยกรรมระบบ (System Architecture)
 ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
-
+## 3. สถาปัตยกรรมระบบ (System Architecture)
+ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
 
 ```mermaid
 flowchart TD
