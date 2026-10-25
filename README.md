@@ -57,6 +57,7 @@
                                   |      (Google Sheets)      |
                                   +---------------------------+
 
+```
 ### รายละเอียดของส่วนประกอบระบบ (Node Responsibilities):
 * **Schedule Trigger:** กระตุ้นการทำงานของ Workflow แบบอัตโนมัติทุกๆ 5 นาที
 * **Read Complaint & Read Policy:** ดึงข้อมูลข้อร้องเรียนดิบและเงื่อนไขนโยบายบริษัทจาก Google Sheets
