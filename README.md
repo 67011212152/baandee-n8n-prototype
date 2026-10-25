@@ -29,12 +29,10 @@
 ระบบทำงานในรูปแบบ **Event-Driven & Rule-Based Automation Workflow** บน n8n ดังนี้:
 
 [Schedule Trigger (Every 5 mins)]
-
           │
           ▼
           
 [Read Google Sheets: Complaint & Policy]
-
           │
           ▼
           
@@ -43,7 +41,6 @@
        ├───► (Order_ID Invalid / UNKNOWN) ───► [Write to "Manual Review" Sheet] (Human-in-the-loop)
        │
        └───► (Order_ID Valid)
-       
                  │
                  ▼
                  
