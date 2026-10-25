@@ -25,18 +25,40 @@
 
 # 3. สถาปัตยกรรมระบบ (System Architecture)
 ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
-## 3. สถาปัตยกรรมระบบ (System Architecture)
+## 🏗️ 3. สถาปัตยกรรมระบบ (System Architecture)
 ระบบทำงานในรูปแบบ End-to-End Automated Pipeline โดยใช้ **n8n** เป็นตัวขับเคลื่อนหลัก ร่วมกับ **Google Sheets** ในการเป็นฐานข้อมูลดิบและการบันทึกผลลัพธ์
 
-```mermaid
-flowchart TD
-    A[Schedule Trigger - Every 5 mins] --> B[Read Complaint & Read Policy]
-    B --> C[Data Quality Check - Code & If Node]
-    
-    C -->|Invalid Order_ID| D[Manual Review Sheet<br/>Human-in-the-loop]
-    C -->|Valid Order_ID| E[Code Node<br/>Keyword Matching & Priority]
-    
-    E --> F[Processed Sheet<br/>Google Sheets]
+```text
++-----------------------------------------------------------------+
+|                 Schedule Trigger (Every 5 mins)                 |
++-----------------------------------------------------------------+
+                                │
+                                ▼
++-----------------------------------------------------------------+
+|           Read Complaint & Read Policy (Google Sheets)          |
++-----------------------------------------------------------------+
+                                │
+                                ▼
++-----------------------------------------------------------------+
+|               Data Quality Check (Code & If Node)               |
++-----------------------------------------------------------------+
+                                │
+                ┌───────────────┴───────────────┐
+                ▼                               ▼
+       [Invalid Order_ID]               [Valid Order_ID]
+                │                               │
+                ▼                               ▼
+  +---------------------------+   +---------------------------+
+  |    Manual Review Sheet    |   |   Code in JavaScript      |
+  |    (Human-in-the-loop)    |   |  (Keyword Matching/SLA)   |
+  +---------------------------+   +---------------------------+
+                                                │
+                                                ▼
+                                  +---------------------------+
+                                  |      Processed Sheet      |
+                                  |      (Google Sheets)      |
+                                  +---------------------------+
+
 
 
 ### รายละเอียดของส่วนประกอบระบบ (Node Responsibilities):
