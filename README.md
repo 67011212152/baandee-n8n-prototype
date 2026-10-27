@@ -68,7 +68,21 @@
   * กำหนดทีมผู้รับผิดชอบ (Responsible Team) และเวลาตอบกลับ (SLA_Hours)
   * กำหนดข้อความตอบกลับอัตโนมัติ (Auto_Reply_Template) ที่เหมาะสมกับบริบทปัญหา
 * **Processed (Google Sheets):** บันทึกผลลัพธ์ที่ผ่านการประมวลผลแล้วลงตารางหลัก
+* 
+## ขอบเขตระหว่างระบบ (System Boundaries & API)
 
+ระบบ BaanDee Complaint Classifier ใช้ n8n เป็น Integration Middleware ซึ่งมีจุดตัดขอบเขตระหว่างระบบที่สำคัญดังนี้:
+
+1. **Schedule Trigger (Job Schedule Boundary):** ระบบจะถูกตั้งเวลาให้ทำงานอัตโนมัติ (Automated Job) ทุกๆ 5 นาที 
+2. **Google Sheets REST API (Data Store Connection):**
+   * **Read Operation (GET):** n8n ยิง API ดึงข้อมูลคำร้องเรียน (`Complaint`) และนโยบาย (`Policy`) จาก Google Cloud
+   * **Write Operation (POST):** n8n ยิง API บันทึกตั๋วที่ประมวลผลแล้วลงตาราง `Processed` และ `Manual Review` ตามเงื่อนไข
+
+### การจัดการสถานการณ์เชื่อมต่อ (Error Handling)
+* **ได้รับข้อมูลสำเร็จ (Success):** ดึงข้อมูลและบันทึกผ่าน Google Sheets API สำเร็จ ข้อมูลจะบันทึกลงตารางทันที
+* **ไม่พบข้อมูล (Data Not Found):** หากดึงข้อมูลแล้วพบว่า `Order_ID` ขาดหาย โหนด `If` จะปัดเคสไปยัง `Manual Review` ทันทีเพื่อกักกันข้อมูล (Data Quarantine)
+* **บริการไม่พร้อมใช้งาน (Service Failure):** หาก Google Sheets API ขัดข้อง n8n จะแสดง Error ภายใน Workflow และหยุดการทำงานเพื่อป้องกันข้อมูลสูญหาย
+  
 ---
 
 ## 4. โครงสร้างฐานข้อมูล (Google Sheets Structure)
