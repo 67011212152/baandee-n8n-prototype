@@ -68,7 +68,7 @@
   * กำหนดทีมผู้รับผิดชอบ (Responsible Team) และเวลาตอบกลับ (SLA_Hours)
   * กำหนดข้อความตอบกลับอัตโนมัติ (Auto_Reply_Template) ที่เหมาะสมกับบริบทปัญหา
 * **Processed (Google Sheets):** บันทึกผลลัพธ์ที่ผ่านการประมวลผลแล้วลงตารางหลัก
-* 
+  
 ## ขอบเขตระหว่างระบบ (System Boundaries & API)
 
 ระบบ BaanDee Complaint Classifier ใช้ n8n เป็น Integration Middleware ซึ่งมีจุดตัดขอบเขตระหว่างระบบที่สำคัญดังนี้:
